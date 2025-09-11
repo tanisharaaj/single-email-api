@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+temporalio
+sendgrid
+pydantic[email]
+python-dotenv
