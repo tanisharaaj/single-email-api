@@ -1,6 +1,7 @@
 from uuid import uuid4
 from fastapi import FastAPI, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.middleware.cors import CORSMiddleware
 from temporalio.client import Client
 
 from app.settings import settings
@@ -10,10 +11,19 @@ from app.auth import require_auth
 
 app = FastAPI(
     title="Member Email API",
-    swagger_ui_parameters={"persistAuthorization": True},
+    swagger_ui_parameters={"persistAuthorization": True}, 
 )
 
 security = HTTPBearer()
+
+# CORS setup
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[origin.strip() for origin in settings.CORS_ALLOW_ORIGINS.split(",")],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.on_event("startup")
